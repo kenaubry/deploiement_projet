@@ -1,6 +1,6 @@
 # deploiement_projet
 
-'''
+```
 - hosts: all
   become: yes
   tasks:
@@ -65,4 +65,4 @@
       systemd:
         daemon_reload: yes
 
-'''
+```
