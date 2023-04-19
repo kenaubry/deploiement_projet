@@ -66,3 +66,35 @@
         daemon_reload: yes
 
 ```
+
+gunicorn.service.j2:
+```
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=vagrant
+Group=www-data
+WorkingDirectory=/home/vagrant/yourproject
+ExecStart=/home/vagrant/yourproject/venv/bin/gunicorn --access-logfile - --workers 3 --bind localhost:{{ gunicorn_port }} yourproject.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+
+nginx-site.conf.j2:
+
+```
+server {
+    listen 80;
+    server_name {{ server_name }};
+
+    location / {
+        proxy_pass http://localhost:{{ gunicorn_port }};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```
