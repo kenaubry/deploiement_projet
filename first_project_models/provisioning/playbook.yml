@@ -1,0 +1,37 @@
+---
+- hosts: all
+  become: true
+  vars:
+    server_name: example.com
+    project_name: my_site
+    gunicorn_port: 8000
+    static_root: ../blog/static/blog
+    media_root: /blog/static/images
+  tasks:
+    - name: Install system packages
+      apt:
+        pkg:
+          - nginx
+          - python3-pip
+          - python3-venv
+          - git
+        state: present
+        update_cache: yes
+
+    - name: Install Gunicorn
+      pip:
+        name: gunicorn
+        state: present
+
+    - name: Configure Nginx
+      template:
+        src: nginx-site.conf.j2
+        dest: /etc/nginx/sites-available/my_site
+      notify:
+        - restart nginx
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

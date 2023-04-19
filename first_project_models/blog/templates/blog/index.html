@@ -1,0 +1,40 @@
+{% extends "base.html" %} 
+{% load static %}
+
+{% block title %} 
+Mon blog
+{% endblock %} 
+
+{% block css_files %}
+  <link rel="stylesheet" href="{% static "blog/post.css" %}" />
+  <link rel="stylesheet" href="{% static "blog/index.css" %}" />
+{% endblock %}
+
+{% block content %}
+<section id="welcome">
+  <header>
+    <img src="{% static "blog/images/djangolittlelogo.png" %}" alt="Logo Django" />
+    <h2>Formation Django</h2>
+  </header>
+  <p>Salut, je suis en train de suivre la formation Django pour mettre en place un site web !</p>
+</section>
+
+<section id="latest-posts">
+  <h2>Mes derniers posts</h2>
+  <ul>
+    {% for post in posts %}
+      {% include "blog/includes/post.html" %}
+    {% endfor %}
+  </ul>
+</section>
+
+<section id="about">
+  <h2>Mon objectif</h2>
+  <p>
+    J'aime programmer et aider les autres à apprendre à développer leurs compétences
+  </p>
+  <p>
+    Mon objectif est de devenir un meilleur développeur et de vous aider à faire de même
+  </p>
+</section>
+{% endblock %}
